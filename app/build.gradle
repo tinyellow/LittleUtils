@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId "com.littleyellow.utils"
+        applicationId "com.littleyellow.demo"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
@@ -26,4 +26,5 @@ dependencies {
     })
     implementation 'com.android.support:appcompat-v7:26.1.0'
     testImplementation 'junit:junit:4.12'
+    implementation project(path: ':utils')
 }
