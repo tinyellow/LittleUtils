@@ -9,7 +9,7 @@ public abstract class LazyFragment extends Fragment {
     protected boolean isVisible;
     // 标志位，标志已经初始化完成。
     private boolean isPrepared;
-
+    // 标志已经懒加载过，下次不用再加载。
     private boolean isLazyLoad;
 
     @Override
