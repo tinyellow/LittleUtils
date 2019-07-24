@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Storage {
+public class StorageUtil {
 
     public static List<StorageBean> getStorages(Context context){
         StorageManager mStorageManager = (StorageManager)context
