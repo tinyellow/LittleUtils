@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.littleyellow.utils.LazyFragment;
+import com.littleyellow.utils.fragment.LazyFragment;
 
 public class LazyFragmentT extends LazyFragment {
 

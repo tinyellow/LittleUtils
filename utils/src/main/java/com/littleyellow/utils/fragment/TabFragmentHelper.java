@@ -1,9 +1,6 @@
-package com.littleyellow.utils;
+package com.littleyellow.utils.fragment;
 
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.ParcelFormatException;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -111,7 +108,7 @@ public class TabFragmentHelper {
     }
 
 
-    private class TabStatePagerAdapter extends FragmentStatePagerAdapter {
+    public class TabStatePagerAdapter extends FragmentStatePagerAdapter {
 
         private ArrayList<TabInfo> tabInfos;
 
@@ -123,6 +120,9 @@ public class TabFragmentHelper {
         @Override
         public Fragment getItem(int position) {
             try {
+                if(null != tabInfos.get(position).fragment){
+                    return tabInfos.get(position).fragment;
+                }
                 Class<?> clazz = tabInfos.get(position).fragmentClass;
                 Fragment fragment = (Fragment) clazz.newInstance();
                 if (tabInfos.get(position).arguments != null) {
@@ -145,7 +145,7 @@ public class TabFragmentHelper {
         }
     }
 
-    private class TabPagerAdapter extends FragmentPagerAdapter {
+    public class TabPagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<TabInfo> tabInfos;
 
@@ -157,6 +157,9 @@ public class TabFragmentHelper {
         @Override
         public Fragment getItem(int position) {
             try {
+                if(null != tabInfos.get(position).fragment){
+                    return tabInfos.get(position).fragment;
+                }
                 Class<?> clazz = tabInfos.get(position).fragmentClass;
                 Fragment fragment = (Fragment) clazz.newInstance();
                 if (tabInfos.get(position).arguments != null) {
@@ -179,50 +182,25 @@ public class TabFragmentHelper {
         }
     }
 
-    private final static class TabInfo implements Parcelable {
+    private final static class TabInfo {
         private final String title;
         private final Bundle arguments;
         private final Class<?> fragmentClass;
+        private final Fragment fragment;
 
         public TabInfo(@NonNull String title, @NonNull Class<? extends Fragment> clazz, @Nullable Bundle arguments) {
             this.title = title;
             this.arguments = arguments;
             this.fragmentClass = clazz;
+            this.fragment = null;
         }
 
-        private TabInfo(Parcel parcel) throws ParcelFormatException {
-            try {
-                this.title = parcel.readString();
-                this.arguments = parcel.readBundle();
-                this.fragmentClass = getClass().getClassLoader().loadClass(parcel.readString());
-            } catch (Exception e) {
-                throw new ParcelFormatException();
-            }
+        public TabInfo(@NonNull String title, @NonNull Fragment fragment) {
+            this.title = title;
+            this.arguments = null;
+            this.fragmentClass = null;
+            this.fragment = fragment;
         }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeString(title);
-            parcel.writeString(fragmentClass.getCanonicalName());
-            parcel.writeBundle(arguments);
-        }
-
-        public static final Creator<TabInfo> CREATOR = new Creator<TabInfo>() {
-            @Override
-            public TabInfo createFromParcel(Parcel parcel) {
-                return new TabInfo(parcel);
-            }
-
-            @Override
-            public TabInfo[] newArray(int i) {
-                return new TabInfo[i];
-            }
-        };
     }
 
 
@@ -254,6 +232,11 @@ public class TabFragmentHelper {
 
         public Builder addTab(String title,Class<? extends Fragment> fragmentClass,Bundle arguments) {
             tabs.add(new TabInfo(title,fragmentClass,arguments));
+            return this;
+        }
+
+        public Builder addTab(String title,Fragment fragment) {
+            tabs.add(new TabInfo(title,fragment));
             return this;
         }
 

@@ -1,4 +1,4 @@
-package com.littleyellow.utils;
+package com.littleyellow.utils.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
