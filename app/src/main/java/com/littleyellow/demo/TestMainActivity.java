@@ -32,7 +32,8 @@ public class TestMainActivity extends AppCompatActivity {
         updateTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tabFragmentHelper.getAdapter().notifyDataSetChanged();
+                H5web2Activity.start(v.getContext(),"http://sitxqy.bndxqc.com/a/login?ht=CCCHT201908070111");
+//                tabFragmentHelper.getAdapter().notifyDataSetChanged();
             }
         });
     }
