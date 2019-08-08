@@ -1,5 +1,6 @@
 package com.littleyellow.demo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.littleyellow.utils.fragment.TabFragmentHelper;
+import com.littleyellow.utils.statebar.StatusBarColor;
 
 public class TestMainActivity extends AppCompatActivity {
 
@@ -16,6 +18,7 @@ public class TestMainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        StatusBarColor.setColor(this, Color.parseColor("#ffffff"));
         TabLayout tableLayout = findViewById(R.id.table_layout);
         ViewPager viewPager = findViewById(R.id.view_pager);
         final TabFragmentHelper tabFragmentHelper = TabFragmentHelper.newBuilder()
