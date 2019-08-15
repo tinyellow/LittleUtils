@@ -10,9 +10,9 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import static com.littleyellow.utils.statebar.StatusBarUtil.DARK_FONT_OFF;
-import static com.littleyellow.utils.statebar.StatusBarUtil.DARK_FONT_ON;
-import static com.littleyellow.utils.statebar.StatusBarUtil.LIGHT_BAR_AOTO;
+import static com.littleyellow.utils.statebar.StatusBarUtil.DARK_FONT_DEFAULT;
+import static com.littleyellow.utils.statebar.StatusBarUtil.DARK_FONT_FORCE;
+import static com.littleyellow.utils.statebar.StatusBarUtil.DARK_WHITE_AOTO;
 import static com.littleyellow.utils.statebar.StatusBarUtil.createStatusBarView;
 import static com.littleyellow.utils.statebar.StatusBarUtil.getStatusBarHeight;
 import static com.littleyellow.utils.statebar.StatusBarUtil.isLightColor;
@@ -26,7 +26,7 @@ import static com.littleyellow.utils.statebar.StatusBarUtil.isLightColor;
 public class StatusBarView {
 
     public static View setColor(Activity activity, @ColorInt int color){
-        return setColor(activity,false,color,LIGHT_BAR_AOTO);
+        return setColor(activity,false,color,DARK_WHITE_AOTO);
     }
 
     /**
@@ -66,8 +66,8 @@ public class StatusBarView {
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
             int visibility = View.SYSTEM_UI_FLAG_VISIBLE;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M&&DARK_FONT_OFF != fontColor) {
-                if(DARK_FONT_ON == fontColor){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M&&DARK_FONT_DEFAULT != fontColor) {
+                if(DARK_FONT_FORCE == fontColor){
                     visibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                 }else if (isLightColor(color)){
                     visibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;

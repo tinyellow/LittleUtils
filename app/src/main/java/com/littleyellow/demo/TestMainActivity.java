@@ -12,13 +12,15 @@ import android.widget.TextView;
 import com.littleyellow.utils.fragment.TabFragmentHelper;
 import com.littleyellow.utils.statebar.StatusBarColor;
 
+import static com.littleyellow.utils.statebar.StatusBarUtil.DARK_WHITE_AOTO;
+
 public class TestMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        StatusBarColor.setColor(this, Color.parseColor("#ffffff"));
+        StatusBarColor.setColor(this, Color.GREEN,DARK_WHITE_AOTO, Color.RED,Color.WHITE);
         TabLayout tableLayout = findViewById(R.id.table_layout);
         ViewPager viewPager = findViewById(R.id.view_pager);
         final TabFragmentHelper tabFragmentHelper = TabFragmentHelper.newBuilder()

@@ -15,11 +15,11 @@ import android.widget.LinearLayout;
  */
 public class StatusBarUtil {
 
-    public static final int DARK_FONT_OFF = 0;
+    public static final int DARK_WHITE_AOTO = 0;
 
-    public static final int DARK_FONT_ON = 1;
+    public static final int DARK_FONT_DEFAULT = 1;
 
-    public static final int LIGHT_BAR_AOTO = 2;
+    public static final int DARK_FONT_FORCE = 2;
 
     /**
      * 生成一个和状态栏大小相同矩形条
