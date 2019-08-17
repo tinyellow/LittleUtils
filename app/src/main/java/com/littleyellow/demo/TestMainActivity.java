@@ -38,6 +38,6 @@ public class TestMainActivity extends AppCompatActivity {
 
         String master = "M"+1+2+3+4;
 
-        String test = "A"+1;
+        String test = "A"+1+2;
     }
 }
