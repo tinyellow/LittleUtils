@@ -39,6 +39,6 @@ public class TestMainActivity extends AppCompatActivity {
         String master = "M"+1+2+3+4+7;
         String master2 = "M"+1+2+3+4+5;
 
-        String test = "A"+1+2;
+        String test = "A"+1;
     }
 }
