@@ -1,6 +1,5 @@
 package com.littleyellow.demo;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -10,9 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.littleyellow.utils.fragment.TabFragmentHelper;
-import com.littleyellow.utils.statebar.StatusBarColor;
-
-import static com.littleyellow.utils.statebar.StatusBarUtil.DARK_WHITE_AOTO;
 
 public class TestMainActivity extends AppCompatActivity {
 
@@ -20,7 +16,6 @@ public class TestMainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        StatusBarColor.setColor(this, Color.GREEN,DARK_WHITE_AOTO, Color.RED,Color.WHITE);
         TabLayout tableLayout = findViewById(R.id.table_layout);
         ViewPager viewPager = findViewById(R.id.view_pager);
         final TabFragmentHelper tabFragmentHelper = TabFragmentHelper.newBuilder()
@@ -37,8 +32,7 @@ public class TestMainActivity extends AppCompatActivity {
         updateTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                H5web2Activity.start(v.getContext(),"http://sitxqy.bndxqc.com/a/login?ht=CCCHT201908070111");
-//                tabFragmentHelper.getAdapter().notifyDataSetChanged();
+                tabFragmentHelper.getAdapter().notifyDataSetChanged();
             }
         });
     }
