@@ -35,5 +35,7 @@ public class TestMainActivity extends AppCompatActivity {
                 tabFragmentHelper.getAdapter().notifyDataSetChanged();
             }
         });
+
+        String test = "A";
     }
 }
