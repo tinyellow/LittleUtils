@@ -37,5 +37,7 @@ public class TestMainActivity extends AppCompatActivity {
         });
 
         String master = "M";
+
+        String test = "A";
     }
 }
