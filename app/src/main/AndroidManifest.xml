@@ -19,6 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".H5web2Activity"/>
+        <!--<activity android:name=".TestMainActivity"/>-->
+
     </application>
 
 </manifest>

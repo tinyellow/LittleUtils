@@ -1,12 +1,14 @@
 package com.littleyellow.demo;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -24,10 +26,10 @@ public class H5web2Activity extends AppCompatActivity {
 
     private String url;
 
-    public static void start(Context context,String title) {
+    public static void start(Activity context, String title,int requestCode) {
         Intent starter = new Intent(context, H5web2Activity.class);
         starter.putExtra(BUNDLE_PARAM_URL,title);
-        context.startActivity(starter);
+        context.startActivityForResult(starter,requestCode);
     }
 
     @Override
@@ -83,6 +85,13 @@ public class H5web2Activity extends AppCompatActivity {
             }
         });
         webView.loadUrl(url);
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                setResult(666);
+                return false;
+            }
+        });
 //        if(!TextUtils.isEmpty(thirdAccessToken)){
 //            Map<String,String> headMap = new HashMap<>();
 //            headMap.put("thirdAccessToken",thirdAccessToken);

@@ -9,6 +9,13 @@
         android:text="tv_update"
         android:padding="10dp"
         />
+    <TextView
+        android:id="@+id/tv_common_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tv_common_start"
+        android:padding="10dp"
+        />
     <android.support.design.widget.TabLayout
         android:id="@+id/table_layout"
         android:layout_width="match_parent"
