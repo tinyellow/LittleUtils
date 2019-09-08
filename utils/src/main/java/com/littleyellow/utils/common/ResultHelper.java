@@ -9,15 +9,17 @@ import android.content.Intent;
 import android.os.Build;
 
 import java.io.Serializable;
+import java.util.Random;
 import java.util.WeakHashMap;
 
 public class ResultHelper {
 
     private ResultHelper(){}
 
-    public static ResultHelper get(){
+    private static ResultHelper get(){
         return SinletonHolder.instance;
     }
+
     private static class SinletonHolder{
         private static final ResultHelper instance = new ResultHelper();
     }
@@ -31,6 +33,15 @@ public class ResultHelper {
     public void addListner(int requestCode,ResultListener listener){
         hashMap.put(requestCode,listener);
     }
+
+    public void removeListner(int requestCode){
+        hashMap.remove(requestCode);
+    }
+
+    public boolean containsCode(int requestCode){
+        return hashMap.containsKey(requestCode);
+    }
+
 
     public static class ResultHandlerFragment extends Fragment {
 
@@ -48,6 +59,7 @@ public class ResultHelper {
             ResultListener listener = ResultHelper.get().getListner(requestCode);
             if (null != listener) {
                 listener.onResult(requestCode,resultCode,data);
+                ResultHelper.get().removeListner(requestCode);
             }
         }
 
@@ -80,15 +92,33 @@ public class ResultHelper {
         }
     }
 
-    public void start(Activity activity, Intent intent, int requestCode, ResultListener listener){
-        start(activity.getFragmentManager(),intent,requestCode,listener);
+    public static void start(Activity activity, final Intent intent, final ResultListener listener){
+        Random ran=new Random();
+        int requestCode ;
+        do{
+            requestCode = ran.nextInt(100);
+        } while (get().containsCode(requestCode));
+        get().start(activity.getFragmentManager(),intent,requestCode,listener);
     }
 
-    public void start(Fragment fragment, Intent intent, int requestCode, ResultListener listener){
-        start(fragment.getFragmentManager(),intent,requestCode,listener);
+    public static void start(Activity activity, Intent intent, int requestCode, ResultListener listener){
+        get().start(activity.getFragmentManager(),intent,requestCode,listener);
     }
 
-    public void start(FragmentManager fragmentManager, final Intent intent, final int requestCode, final ResultListener listener){
+    public static void start(Fragment fragment, final Intent intent, final ResultListener listener){
+        Random ran=new Random();
+        int requestCode ;
+        do{
+            requestCode = ran.nextInt(100);
+        } while (get().containsCode(requestCode));
+        get().start(fragment.getFragmentManager(),intent,requestCode,listener);
+    }
+
+    public static void start(Fragment fragment, Intent intent, int requestCode, ResultListener listener){
+        get().start(fragment.getFragmentManager(),intent,requestCode,listener);
+    }
+
+    private void start(FragmentManager fragmentManager, final Intent intent, final int requestCode, final ResultListener listener){
         ResultHandlerFragment fragment = (ResultHandlerFragment) fragmentManager.findFragmentByTag(
                 ResultHandlerFragment.class.getSimpleName());
         if (fragment == null) {
