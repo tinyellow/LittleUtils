@@ -1,3 +1,7 @@
 [submodule "submodule"]
 	path = test2
 	url = https://github.com/cunmin/TestSubModule.git
+
+[submodule "submodul2"]
+    path = submodul2
+    url = https://github.com/cunmin/submodule2.git
