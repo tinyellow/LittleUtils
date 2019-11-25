@@ -5,7 +5,11 @@
 [submodule "submodul2"]
     path = submodul2
     url = https://github.com/cunmin/submodule2.git
-    
-    
 
 
+[submodule "submodul3"]
+	path = submodul3
+	url = https://github.com/cunmin/submodule3.git
+[submodule "sub4"]
+	path = sub4
+	url = https://github.com/cunmin/submodule4.git
