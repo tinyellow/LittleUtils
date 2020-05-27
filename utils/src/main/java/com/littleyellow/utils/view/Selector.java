@@ -16,7 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 /**
- * Created by 小黄
+ * Created by 小黄 on 2020/5/27
  */
 public class Selector {
 
