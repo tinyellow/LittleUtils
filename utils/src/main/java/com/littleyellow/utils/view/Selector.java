@@ -15,6 +15,9 @@ import android.support.annotation.FloatRange;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
+/**
+ * Created by 小黄
+ */
 public class Selector {
 
     private final View view;
