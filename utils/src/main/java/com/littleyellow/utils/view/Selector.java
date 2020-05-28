@@ -14,8 +14,9 @@ import android.support.annotation.FloatRange;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import static com.littleyellow.kotlinlib.Shape.getDrawableCompat;
-import static com.littleyellow.kotlinlib.Shape.setBackgroundCompat;
+import static com.littleyellow.utils.view.Shape.getDrawableCompat;
+import static com.littleyellow.utils.view.Shape.setBackgroundCompat;
+
 
 /**
  * Created by 小黄 on 2020/5/27
