@@ -9,11 +9,13 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+
+import static com.littleyellow.kotlinlib.Shape.getDrawableCompat;
+import static com.littleyellow.kotlinlib.Shape.setBackgroundCompat;
 
 /**
  * Created by 小黄 on 2020/5/27
@@ -27,7 +29,7 @@ public class Selector {
     private ShapeEditor disableShape;
     private ShapeEditor selectedShape;
 
-    private Unit unit;
+    private Shape.Unit unit;
 
     private float defPressDark = 0.1f;
 
@@ -35,10 +37,10 @@ public class Selector {
 
     public Selector(View view) {
         this.view = view;
-        unit = new DpUnit(view.getContext());
+        unit = new Shape.DpUnit(view.getContext());
     }
 
-    public Selector setUnit(Unit unit) {
+    public Selector setUnit(Shape.Unit unit) {
         this.unit = unit;
         return this;
     }
@@ -96,26 +98,26 @@ public class Selector {
 
         if(null != disableShape){
             int[] colors = disableShape.colors;
-            GradientDrawable pressed = getDrawable(disableShape.radius,colors,disableShape.orientation);
-            pressed.setStroke(disableShape.strokeWidth,disableShape.strokeColor);
+            GradientDrawable pressed = getDrawableCompat(disableShape.radius,colors,disableShape.orientation);
+            setStroke(pressed,disableShape);
             sld.addState(new int[]{-android.R.attr.state_enabled}, pressed);
         }
 
         if(null != selectedShape){
             int[] colors = selectedShape.colors;
-            GradientDrawable selected = getDrawable(selectedShape.radius,colors,selectedShape.orientation);
-            selected.setStroke(selectedShape.strokeWidth,selectedShape.strokeColor);
+            GradientDrawable selected = getDrawableCompat(selectedShape.radius,colors,selectedShape.orientation);
+            setStroke(selected,selectedShape);
             sld.addState(new int[]{android.R.attr.state_selected}, selected);
         }
 
         if(null != pressShape){
             int[] colors = pressShape.colors;
 
-            if (pressRipple && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (pressRipple && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 rippleColor = colors[0];
             }else{
-                GradientDrawable pressed = getDrawable(pressShape.radius,colors,pressShape.orientation);
-                pressed.setStroke(pressShape.strokeWidth,pressShape.strokeColor);
+                GradientDrawable pressed = getDrawableCompat(pressShape.radius,colors,pressShape.orientation);
+                setStroke(pressed,pressShape);
                 sld.addState(new int[]{android.R.attr.state_pressed}, pressed);
             }
         }else if(null != normalShape){
@@ -125,23 +127,23 @@ public class Selector {
                 colors[i] = translateDark(normalShape.colors[i], defPressDark);
             }
             rippleColor = colors[0];
-            if (pressRipple && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (pressRipple && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 rippleColor = colors[0];
             }else{
-                GradientDrawable pressed = getDrawable(normalShape.radius,colors,normalShape.orientation);
-                pressed.setStroke(normalShape.strokeWidth,normalShape.strokeColor);
+                GradientDrawable pressed = getDrawableCompat(normalShape.radius,colors,normalShape.orientation);
+                setStroke(pressed,normalShape);
                 sld.addState(new int[]{android.R.attr.state_pressed}, pressed);
             }
         }
 
         if(null != normalShape){
             int[] colors = normalShape.colors;
-            GradientDrawable normal = getDrawable(normalShape.radius,colors,normalShape.orientation);
-            normal.setStroke(normalShape.strokeWidth,normalShape.strokeColor);
+            GradientDrawable normal = getDrawableCompat(normalShape.radius,colors,normalShape.orientation);
+            setStroke(normal,normalShape);
             sld.addState(new int[]{}, normal);
         }
 
-        if (pressRipple && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP&& -1 != rippleColor) {
+        if (pressRipple && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP&& -1 != rippleColor) {
             int[][] stateList = new int[][]{
                     new int[]{android.R.attr.state_pressed},
                     new int[]{android.R.attr.state_focused},
@@ -168,9 +170,18 @@ public class Selector {
         return sld;
     }
 
+    private void setStroke(GradientDrawable drawable,ShapeEditor shapeEditor) {
+        if(0 == shapeEditor.dashWidth && 0 == shapeEditor.dashGap){
+            drawable.setStroke(shapeEditor.strokeWidth,shapeEditor.strokeColor);
+        }else{
+            drawable.setStroke(shapeEditor.strokeWidth,shapeEditor.strokeColor,shapeEditor.dashWidth,shapeEditor.dashGap);
+            view.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+        }
+    }
+
 
     public void setBackground(){
-        setBackground(getDrawable(),view);
+        setBackgroundCompat(getDrawable(),view);
     }
 
     public static class ShapeEditor {
@@ -180,6 +191,12 @@ public class Selector {
         //    int bgColor;
         private int strokeWidth = 0;
         private int strokeColor = Color.TRANSPARENT;
+        /**
+         * 在android中设置虚线需要
+         * 1. 用shape画虚线使用时，控件的layout_height一定要大于shape中stroke标签的width属性
+         * 2. 将该控件设置关闭硬件加速（这里会处理）
+         */
+        private int dashWidth = 0,dashGap = 0;
         private GradientDrawable.Orientation orientation = GradientDrawable.Orientation.LEFT_RIGHT;
 
         private final Selector selector;
@@ -194,26 +211,26 @@ public class Selector {
             return this;
         }
 
-        public ShapeEditor radius(float lr,float tr,float rr,float br){
-            float lr_ = selector.unit.convert(lr);
-            float tr_ = selector.unit.convert(tr);
-            float rr_ = selector.unit.convert(rr);
-            float br_ = selector.unit.convert(br);
-            radius = new float[]{lr_,lr_,tr_,tr_,rr_,rr_,br_,br_};
+        public ShapeEditor radius(float topLeft, float topRight, float bottomRight, float bottomLeft){
+            float topLeft_ = selector.unit.convert(topLeft);
+            float topRight_ = selector.unit.convert(topRight);
+            float bottomRight_ = selector.unit.convert(bottomRight);
+            float bottomLeft_ = selector.unit.convert(bottomLeft);
+            radius = new float[]{topLeft_,topLeft_,topRight_,topRight_,bottomRight_,bottomRight_,bottomLeft_,bottomLeft_};
             return this;
         }
 
-        public ShapeEditor radius(float lx,float ly,float tx,float ty,float rx,float ry,float bx,float by){
-            float lx_ = selector.unit.convert(lx);
-            float ly_ = selector.unit.convert(ly);
-            float tx_ = selector.unit.convert(tx);
-            float ty_ = selector.unit.convert(ty);
+        public ShapeEditor radius(float topLeftX, float topLeftY, float topRightX, float topRightY, float bottomRightX, float bottomRightY, float bottomLeftX, float bottomLeftY){
+            float topLeftX_ = selector.unit.convert(topLeftX);
+            float topLeftY_ = selector.unit.convert(topLeftY);
+            float topRightX_ = selector.unit.convert(topRightX);
+            float topRightY_ = selector.unit.convert(topRightY);
 
-            float rx_ = selector.unit.convert(rx);
-            float ry_ = selector.unit.convert(ry);
-            float bx_ = selector.unit.convert(bx);
-            float by_ = selector.unit.convert(by);
-            radius = new float[]{lx_,ly_,tx_,ty_,rx_,ry_,bx_,by_};
+            float bottomRightX_ = selector.unit.convert(bottomRightX);
+            float bottomRightY_ = selector.unit.convert(bottomRightY);
+            float bottomLeftX_ = selector.unit.convert(bottomLeftX);
+            float bottomLeftY_ = selector.unit.convert(bottomLeftY);
+            radius = new float[]{topLeftX_,topLeftY_,topRightX_,topRightY_,bottomRightX_,bottomRightY_,bottomLeftX_,bottomLeftY_};
             return this;
         }
 
@@ -257,6 +274,12 @@ public class Selector {
             return this;
         }
 
+        public ShapeEditor dash(int width, int gap) {
+            this.dashWidth = (int) selector.unit.convert(width);
+            this.dashGap = (int) selector.unit.convert(gap);
+            return this;
+        }
+
         public ShapeEditor orientation(GradientDrawable.Orientation orientation) {
             this.orientation = orientation;
             return this;
@@ -293,70 +316,9 @@ public class Selector {
         }
     }
 
-    /**
-     *
-     * @param radius 四个角的半径
-     * @param colors 渐变的颜色
-     * @return
-     */
-    public static GradientDrawable getDrawable(float []radius,int []colors,GradientDrawable.Orientation orientation) {
-        //TODO:判断版本是否大于16  项目中默认的都是Linear散射 都是从左到右 都是只有开始颜色和结束颜色
-        GradientDrawable drawable;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-        {
-            drawable=new GradientDrawable();
-            drawable.setOrientation(orientation);
-            drawable.setColors(colors);
-        }else{
-            drawable = new GradientDrawable(orientation, colors);
-        }
 
-        drawable.setCornerRadii(radius);
-        drawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        return drawable;
-    }
 
-    /**
-     *
-     * @param drawable 生成的背景
-     * @param view 需要添加背景的View
-     */
-    public static void setBackground(Drawable drawable, View view){
-        //判断当前版本号，版本号大于等于16，使用setBackground；版本号小于16，使用setBackgroundDrawable。
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-        {
-            view.setBackground(drawable);
-        }else{
-            view.setBackgroundDrawable(drawable);
-        }
-    }
 
-    public interface Unit{
-        float convert(float dpValue);
-    }
-
-    public class DpUnit implements Unit{
-
-        private Context context;
-
-        public DpUnit(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public float convert(float dpValue) {
-            final float scale = context.getResources().getDisplayMetrics().density;
-            return (dpValue * scale + 0.5f);
-        }
-    }
-
-    public class PxUnit implements Unit{
-
-        @Override
-        public float convert(float dpValue) {
-            return dpValue;
-        }
-    }
 
     public static int translateDark(int color,float ratio){
         ratio = 1f - ratio;
