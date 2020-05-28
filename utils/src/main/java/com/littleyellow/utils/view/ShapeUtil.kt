@@ -20,10 +20,10 @@ class Selector(private val view: View) {
     private var pressShape: ShapeEditor? = null
     private var disableShape: ShapeEditor? = null
     private var selectedShape: ShapeEditor? = null
-    private var unit: Shape.Unit
+    private var unit: Shape.Convert
     private var defPressDark = 0.1f
     private var pressRipple = false
-    fun setUnit(unit: Shape.Unit): Selector {
+    fun setUnit(unit: Shape.Convert): Selector {
         this.unit = unit
         return this
     }
@@ -297,7 +297,7 @@ class Selector(private val view: View) {
 }
 
 class Shape(private val view: View) {
-    private var unit: Unit
+    private var unit: Convert
     private var color = 0
     private var radius = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
     private var strokeWidth = 0
@@ -309,7 +309,7 @@ class Shape(private val view: View) {
      */
     private var dashWidth = 0
     private var dashGap = 0
-    fun setUnit(unit: Unit): Shape {
+    fun setUnit(unit: Convert): Shape {
         this.unit = unit
         return this
     }
@@ -370,7 +370,7 @@ class Shape(private val view: View) {
         return this
     }
 
-    fun setShape(): kotlin.Unit {
+    fun setShape(){
         setBackgroundCompat(drawable, view)
     }
 
@@ -399,11 +399,11 @@ class Shape(private val view: View) {
             return drawable
         }
 
-    interface Unit {
+    interface Convert {
         fun convert(dpValue: Float): Float
     }
 
-    class DpUnit(private val context: Context) : Unit {
+    class DpUnit(private val context: Context) : Convert {
         override fun convert(dpValue: Float): Float {
             val scale = context.resources.displayMetrics.density
             return dpValue * scale + 0.5f
@@ -411,7 +411,7 @@ class Shape(private val view: View) {
 
     }
 
-    inner class PxUnit : Unit {
+    inner class PxUnit : Convert {
         override fun convert(dpValue: Float): Float {
             return dpValue
         }
@@ -443,7 +443,7 @@ class Shape(private val view: View) {
          * @param drawable 生成的背景
          * @param view 需要添加背景的View
          */
-        fun setBackgroundCompat(drawable: Drawable?, view: View): kotlin.Unit { //判断当前版本号，版本号大于等于16，使用setBackground；版本号小于16，使用setBackgroundDrawable。
+        fun setBackgroundCompat(drawable: Drawable?, view: View){ //判断当前版本号，版本号大于等于16，使用setBackground；版本号小于16，使用setBackgroundDrawable。
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 view.background = drawable
             } else {
