@@ -16,7 +16,7 @@ public class ResultHelper {
 
     private ResultHelper(){}
 
-    private static ResultHelper get(){
+    public static ResultHelper get(){
         return SinletonHolder.instance;
     }
 

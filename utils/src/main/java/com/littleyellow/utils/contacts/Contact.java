@@ -1,6 +1,6 @@
 package com.littleyellow.utils.contacts;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class Contact implements Comparable<Contact>{
 

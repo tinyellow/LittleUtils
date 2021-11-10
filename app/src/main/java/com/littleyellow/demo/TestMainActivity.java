@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import com.google.android.material.tabs.TabLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,9 +17,12 @@ import com.littleyellow.utils.common.ResultHelper;
 import com.littleyellow.utils.fragment.TabFragmentHelper;
 import com.littleyellow.utils.statebar.StatusBarColor;
 import com.squareup.leakcanary.LeakCanary;
+import com.tinyellow.shape.ShapeUtilKt;
 
 import static com.littleyellow.demo.H5web2Activity.BUNDLE_PARAM_URL;
 import static com.littleyellow.utils.statebar.StatusBarUtil.DARK_WHITE_AOTO;
+
+import org.w3c.dom.Text;
 
 public class TestMainActivity extends AppCompatActivity {
 
@@ -75,8 +79,8 @@ public class TestMainActivity extends AppCompatActivity {
             }
         });
 
-
-
+        TextView bottom_tv = findViewById(R.id.bottom_tv);
+        ShapeUtilKt.shape(bottom_tv).color(Color.BLUE).radius(20).setBackground();
     }
 
     @Override

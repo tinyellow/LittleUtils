@@ -9,9 +9,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.support.annotation.ColorRes;
-import android.support.annotation.FloatRange;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.ColorRes;
+import androidx.annotation.FloatRange;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 
 import static com.littleyellow.utils.view.Shape.getDrawableCompat;

@@ -6,9 +6,9 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.*
 import android.os.Build
-import android.support.annotation.ColorRes
-import android.support.annotation.FloatRange
-import android.support.v4.content.ContextCompat
+import androidx.annotation.ColorRes
+import androidx.annotation.FloatRange
+import androidx.core.content.ContextCompat
 import android.view.View
 
 fun View.selector(): Selector.ShapeEditor = Selector(this).editNormal()
