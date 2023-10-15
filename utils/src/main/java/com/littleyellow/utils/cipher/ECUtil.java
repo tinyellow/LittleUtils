@@ -17,6 +17,7 @@ import org.bouncycastle.util.io.pem.PemWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.security.Key;
@@ -28,6 +29,7 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
+import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECGenParameterSpec;
@@ -180,6 +182,19 @@ public class ECUtil {
         boolean verifyECDSA = verifyECDSA(publicKey, signECDSA, data);
         System.out.println("验签结果："+verifyECDSA);
         Log.e("ECUtil","验签结果："+verifyECDSA);
+
+        String t = "-----BEGIN PRIVATE KEY-----\n" +
+                "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgj1C1fDEQ9gyoDXYN\n" +
+                "R2FRIJNPz4NvaEXaX16tBkIJsLegCgYIKoZIzj0DAQehRANCAATCoa/t0JaHq2y5\n" +
+                "/VpGVbOfgJUFziYtCZOCKRE9+qwsHZxCjfK9tkOcMS5ad2K3CtrzIW5Qe6co7faI\n" +
+                "Sev+X3c1\n" +
+                "-----END PRIVATE KEY-----";
+        ECPrivateKey key = readPrivateKey(t);
+        String t2 = printKey("PRIVATE KEY",key);
+        Log.e("ECUtil",t2);
+        if(t.equals(t2)){
+            Log.e("ECUtil","---->");
+        }
     }
 
     public static String printKey(String type, Key data) throws IOException {
@@ -217,6 +232,19 @@ public class ECUtil {
             byte[] content = pemObject.getContent();
             PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(content);
             return (RSAPrivateKey) factory.generatePrivate(privKeySpec);
+        }
+    }
+
+    public static ECPrivateKey readPrivateKey(String string) throws Exception {
+        KeyFactory factory = KeyFactory.getInstance("EC");
+
+        try (StringReader keyReader = new StringReader(string);
+             PemReader pemReader = new PemReader(keyReader)) {
+
+            PemObject pemObject = pemReader.readPemObject();
+            byte[] content = pemObject.getContent();
+            PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(content);
+            return (ECPrivateKey) factory.generatePrivate(privKeySpec);
         }
     }
 
